@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>段考成績分析工具</title>
+  <style>
+    :root{
+      --blue-900:#003366;
+      --blue-600:#0055aa;
+      --blue-500:#0066cc;
+      --bg:#eef7ff;
+      --border:#99ccee;
+      --green:#1a8c00;
+      --red:#cc0000;
+      --black:#000000;
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      margin:20px;
+      max-width:640px;
+      color:var(--blue-900);
+      background:#ffffff;
+    }
+    h1{
+      font-size:28px;
+      font-weight:700;
+      margin:0 0 16px 0;
+      color:var(--blue-600);
+    }
+    .card{
+      padding:16px;
+      border-radius:12px;
+      background:#fff;
+      border:1px solid rgba(0,85,170,0.06);
+      box-shadow:0 2px 6px rgba(3,50,90,0.03);
+    }
+    label{display:block;margin-top:12px;font-weight:600;font-size:14px;}
+    input[type="number"]{
+      width:100%;padding:10px;margin-top:6px;border:1px solid var(--blue-500);
+      border-radius:8px;font-size:15px;box-sizing:border-box;
+    }
+    .row{display:flex;gap:12px}
+    .row>div{flex:1}
+    button{
+      margin-top:18px;padding:12px 16px;cursor:pointer;background:var(--blue-500);
+      color:white;border:none;border-radius:8px;font-size:16px;
+    }
+    .result{margin-top:18px;padding:16px;border:1px solid var(--border);
+      border-radius:10px;background:var(--bg);
+    }
+    h3{margin:8px 0 6px 0}
+    p{margin:4px 0}
+    .green{color:var(--green);font-weight:700}
+    .red{color:var(--red);font-weight:700}
+    .black{color:var(--black);font-weight:700}
+  </style>
+</head>
+<body>
+  <h1>段考成績分析工具</h1>
+
+  <main class="card">
+    <label for="total">段考總分</label>
+    <input type="number" id="total" min="0" step="any" />
+
+    <label for="taught">教學覆蓋分數（自動 = 90% × 總分，可調整）</label>
+    <input type="number" id="taught" min="0" step="any" />
+
+    <div class="row">
+      <div>
+        <label for="learned">確實學會的題目分</label>
+        <input type="number" id="learned" min="0" step="any" />
+      </div>
+      <div>
+        <label for="scored">實得的題目分</label>
+        <input type="number" id="scored" min="0" step="any" />
+      </div>
+    </div>
+
+    <button id="calcBtn">計算</button>
+
+    <div class="result" id="result"></div>
+  </main>
+
+<script>
+(function(){
+  let manualTaught=false;
+  const total=document.getElementById('total');
+  const taught=document.getElementById('taught');
+  const learned=document.getElementById('learned');
+  const scored=document.getElementById('scored');
+  const result=document.getElementById('result');
+
+  taught.addEventListener('input',()=>manualTaught=true);
+
+  total.addEventListener('input',()=>{
+    const t=Number(total.value);
+    if(!manualTaught && t>0){taught.value=(t*0.9).toFixed(1);}  
+  });
+
+  [total,taught,learned,scored].forEach(el=>{
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();calc();}});
+  });
+
+  document.getElementById('calcBtn').addEventListener('click',calc);
+
+  function pct(r){return isFinite(r)?(r*100).toFixed(1)+'%':'—';}
+  function color(r){if(r>0.90)return 'green'; if(r>=0.85)return 'black'; return 'red';}
+  function label(r){if(r>0.90)return '（優良）'; if(r>=0.85)return '（尚可）'; return '（待加強）';}
+
+  function calc(){
+    const T=Number(total.value);
+    const C=Number(taught.value);
+    const L=Number(learned.value);
+    const S=Number(scored.value);
+
+    if(!(T>0 && C>0 && L>0)){
+      result.innerHTML='<p class="red">請輸入完整數據（總分 / 覆蓋 / 學會）。</p>';
+      return;
+    }
+
+    const prep=C/T;
+    const learn=L/C;
+    const exec=L?S/L:0;
+
+    let out='';
+    out+=`<h3>教學準備度</h3><p>${pct(prep)}</p>`;
+    out+=`<h3>內容學習率</h3><p class="${color(learn)}">${pct(learn)} ${label(learn)}</p>`;
+    out+=`<h3>解題執行率</h3><p class="${color(exec)}">${pct(exec)} ${label(exec)}</p>`;
+
+    out+='<h3>改善方式：</h3>';
+    if(learn<0.85){
+      out+=`<p><strong>學習率不佳：</strong><br>1. 上課保持專注<br>2. 完成筆記與作業<br>3. 每日規劃複習</p>`;
+    }
+    if(exec<0.85){
+      out+=`<p><strong>執行率不佳：</strong><br>1. 加強計算速度與精準度<br>2. 注意考試時間配置<br>3. 保持身心穩定</p>`;
+    }
+
+    result.innerHTML=out;
+  }
+})();
+</script>
+</body>
+</html>
