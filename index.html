@@ -139,12 +139,12 @@
       out += `<p><span class="black">內容習得率：</span> <span class="${color(learn)}">${pct(learn)} ${label(learn)}</span></p>`;
       out += `<p><span class="black">解題執行率：</span> <span class="${color(exec)}">${pct(exec)} ${label(exec)}</span></p>`;
 
-      out+='<h3>改善方式：</h3>';
+      out+='<h3>改善建議：</h3>';
     if(learn<0.93){
-      out+=`<p><strong>習得率不佳：</strong><br>1. 上課保持專注<br>2. 認真完成筆記與作業<br>3. 每日規劃在家複習時間</p>`;
+      out+=`<p>1. 上課保持專注<br>2. 認真完成筆記與作業<br>3. 每日規劃在家複習時間</p>`;
     }
     if(exec<0.93){
-      out+=`<p><strong>執行率不佳：</strong><br>1. 加強計算速度與精準度<br>2. 注意考試時間分配<br>3. 保持良好身體健康與心態</p>`;
+      out+=`<p>1. 加強計算速度與精準度<br>2. 注意考試時間分配<br>3. 保持良好身體健康與心態</p>`;
     }
 
     result.innerHTML=out;
