@@ -96,7 +96,7 @@
 
   total.addEventListener('input',()=>{
     const t=Number(total.value);
-    if(!manualTaught && t>0){taught.value=(t*0.9).toFixed(1);}  
+    if(!manualTaught && t>0){taught.value=(t*0.9).toFixed(0);}  
   });
 
   [total,taught,learned,scored].forEach(el=>{
