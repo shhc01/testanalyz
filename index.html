@@ -48,6 +48,7 @@
     }
     .result{margin-top:18px;padding:16px;border:1px solid var(--border);
       border-radius:10px;background:var(--bg);
+      min-height:120px;
     }
     h3{margin:8px 0 6px 0}
     p{margin:4px 0}
@@ -105,8 +106,18 @@
   document.getElementById('calcBtn').addEventListener('click',calc);
 
   function pct(r){return isFinite(r)?(r*100).toFixed(1)+'%':'—';}
-  function color(r){if(r>0.90)return 'green'; if(r>=0.85)return 'black'; return 'red';}
-  function label(r){if(r>0.90)return '（優良）'; if(r>=0.85)return '（尚可）'; return '（待加強）';}
+
+  function color(r){
+    if(r>0.93) return 'green';
+    if(r>=0.84) return 'black';
+    return 'red';
+  }
+
+  function label(r){
+    if(r>0.93) return '（優良）';
+    if(r>=0.84) return '（尚可）';
+    return '（待加強）';
+  }
 
   function calc(){
     const T=Number(total.value);
@@ -129,12 +140,10 @@
     out+=`<h3>解題執行率</h3><p class="${color(exec)}">${pct(exec)} ${label(exec)}</p>`;
 
     out+='<h3>改善方式：</h3>';
-    if(learn<0.85){
-      out+=`<p><strong>學習率不佳：</strong><br>1. 上課保持專注<br>2. 完成筆記與作業<br>3. 每日規劃複習</p>`;
-    }
-    if(exec<0.85){
-      out+=`<p><strong>執行率不佳：</strong><br>1. 加強計算速度與精準度<br>2. 注意考試時間配置<br>3. 保持身心穩定</p>`;
-    }
+
+    out+=`<p><strong>學習率改善：</strong><br>1. 上課保持專注<br>2. 完成筆記與作業<br>3. 每日規劃複習</p>`;
+
+    out+=`<p><strong>執行率改善：</strong><br>1. 加強計算速度與精準度<br>2. 注意考試時間配置<br>3. 保持身心穩定</p>`;
 
     result.innerHTML=out;
   }
@@ -142,3 +151,4 @@
 </script>
 </body>
 </html>
+
