@@ -134,10 +134,10 @@
     const learn=L/C;
     const exec=L?S/L:0;
 
-    let out='';
-    out+=`<h3>教學覆蓋率</h3><p>${pct(prep)}</p>`;
-    out+=`<h3>內容學習率</h3><p class="${color(learn)}">${pct(learn)} ${label(learn)}</p>`;
-    out+=`<h3>解題執行率</h3><p class="${color(exec)}">${pct(exec)} ${label(exec)}</p>`;
+    let out = '';
+      out += `<p><span class="black">教學準備度：</span> <span class="${color(prep)}">${pct(prep)} ${label(prep)}</span></p>`;
+      out += `<p><span class="black">內容學習率：</span> <span class="${color(learn)}">${pct(learn)} ${label(learn)}</span></p>`;
+      out += `<p><span class="black">解題執行率：</span> <span class="${color(exec)}">${pct(exec)} ${label(exec)}</span></p>`;
 
       out+='<h3>改善方式：</h3>';
     if(learn<0.93){
